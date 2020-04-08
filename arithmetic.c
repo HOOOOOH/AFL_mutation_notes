@@ -103,7 +103,7 @@
          & 0xff overflow checks) and if it couldn't be a product of
          a bitflip. 
          首先尝试小端序加法和减法。
-         仅当操作会影响一个以上的字节（因此＆0xff溢出检查）
+         仅当操作会影响一个以上的字节（因此进行＆0xff溢出检查）
          并且它不能是位翻转的产物时才执行此操作*/
 
       stage_val_type = STAGE_VAL_LE; 
