@@ -259,7 +259,7 @@ havoc_stage:
           if (temp_len + HAVOC_BLK_XL < MAX_FILE) {
 
             /* Clone bytes (75%) or insert a block of constant bytes (25%).
-                克隆字节（75％）或插入一个常量字节块（25％） */
+                复制字节（75％）或插入一个常量字节块（25％） */
 
             u8  actually_clone = UR(4);
             u32 clone_from, clone_to, clone_len;
@@ -334,7 +334,7 @@ havoc_stage:
 
         /* Values 15 and 16 can be selected only if there are any extras
            present in the dictionaries. 
-           只有在字典中存在任何额外值时才能选择值15和16 */
+           只有在字典中存在任何额外token时才能选择值15和16 */
 
         case 15: {
 
@@ -359,7 +359,7 @@ havoc_stage:
             } else {
 
               /* No auto extras or odds in our favor. Use the dictionary.
-              没有自动附加费或赔率对我们有利。使用字典  */
+              没有我们想要的自动附加token或机会，那么使用字典  */
 
               u32 use_extra = UR(extras_cnt);
               u32 extra_len = extras[use_extra].len;
@@ -383,7 +383,7 @@ havoc_stage:
 
             /* Insert an extra. Do the same dice-rolling stuff as for the
                previous case.
-               插入一个额外的。做与上一案例相同的掷骰子操作 */
+               插入一个额外的token。做与上一案例相同的掷骰子操作 */
 
             if (!extras_cnt || (a_extras_cnt && UR(2))) {
 
@@ -446,7 +446,7 @@ havoc_stage:
 
     /* If we're finding new stuff, let's run for a bit longer, limits
        permitting. 
-       如果我们发现新的东西，让我们运行更长的时间，限制允许 */
+       如果我们发现新的东西，让我们运行更长的时间，限制在允许的范围内 */
 
     if (queued_paths != havoc_queued) {
 
