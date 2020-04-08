@@ -1,5 +1,5 @@
 /********************************
- * INTERESTING VALUES 有趣值替换 *
+ * INTERESTING VALUES 有意思的值替换 *
  ********************************/
 
   stage_name  = "interest 8/8";
@@ -11,7 +11,7 @@
 
   orig_hit_cnt = new_hit_cnt;
 
-  /* Setting 8-bit integers. 设置8位整数 */
+  /* Setting 8-bit integers. 设置8-bit整数 */
 
   for (i = 0; i < len; i++) {
 
@@ -54,7 +54,7 @@
   stage_finds[STAGE_INTEREST8]  += new_hit_cnt - orig_hit_cnt;
   stage_cycles[STAGE_INTEREST8] += stage_max;
 
-  /* Setting 16-bit integers, both endians. 16bit整数 */
+  /* Setting 16-bit integers, both endians. 16-bit 整数 */
 
   if (no_arith || len < 2) goto skip_interest;
 
@@ -84,7 +84,7 @@
 
       /* Skip if this could be a product of a bitflip, arithmetics,
          or single-byte interesting value insertion. 
-         如果这可能是位翻转，算术或单字节有趣值插入的产物，则跳过 */
+         如果这可能是位翻转，算术或单字节有意思的值插入的产物，则跳过 */
 
       if (!could_be_bitflip(orig ^ (u16)interesting_16[j]) &&
           !could_be_arith(orig, (u16)interesting_16[j], 2) &&
@@ -125,7 +125,7 @@
 
   if (len < 4) goto skip_interest;
 
-  /* Setting 32-bit integers, both endians. 32bit置换*/
+  /* Setting 32-bit integers, both endians. 32-bit置换*/
 
   stage_name  = "interest 32/8";
   stage_short = "int32";
@@ -154,7 +154,7 @@
 
       /* Skip if this could be a product of a bitflip, arithmetics,
          or word interesting value insertion.
-         如果这可能是位翻转，算术或单词有趣的值插入的产物，则跳过 */
+         如果这可能是位翻转，算术或字的有意思的值插入的产物，则跳过 */
 
       if (!could_be_bitflip(orig ^ (u32)interesting_32[j]) &&
           !could_be_arith(orig, interesting_32[j], 4) &&
