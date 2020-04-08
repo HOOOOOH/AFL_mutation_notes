@@ -66,7 +66,7 @@ retry_splicing:
     /* Find a suitable splicing location, somewhere between the first and
        the last differing byte. Bail out if the difference is just a single
        byte or so. 
-       在第一个和最后一个不同的字节之间找到合适的拼接位置。如果差异仅是一个字节左右，就保释(排除、舀水)。  */
+       在第一个和最后一个不同的字节之间找到合适的拼接位置。如果差异仅是一个字节左右，就排除（还有保释、舀水的意思)。  */
 
     locate_diffs(in_buf, new_buf, MIN(len, target->len), &f_diff, &l_diff);
 
@@ -80,7 +80,7 @@ retry_splicing:
 
     split_at = f_diff + UR(l_diff - f_diff);
 
-    /* Do the thing. 实施   */
+    /* Do the thing. 实施操作 */
 
     len = target->len;
     memcpy(new_buf, in_buf, split_at);
