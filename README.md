@@ -1,2 +1,2 @@
 # notes
-afl's mutation strategy analysis
+afl的六种变异操作提取以及英文注释的翻译
