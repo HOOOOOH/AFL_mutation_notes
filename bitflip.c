@@ -8,7 +8,7 @@
     _arf[(_bf) >> 3] ^= (128 >> ((_bf) & 7)); \
   } while (0)
 
-  /* Single walking bit. 一个比特步长 */
+  /* Single walking bit. 一个bit步长 */
 
   stage_short = "flip1";
   stage_max   = len << 3;
@@ -107,7 +107,7 @@
   stage_finds[STAGE_FLIP1]  += new_hit_cnt - orig_hit_cnt;
   stage_cycles[STAGE_FLIP1] += stage_max;
 
-  /* Two walking bits. 两个比特步长 */
+  /* Two walking bits. 两个bit步长 */
 
   stage_name  = "bitflip 2/1";
   stage_short = "flip2";
@@ -134,7 +134,7 @@
   stage_finds[STAGE_FLIP2]  += new_hit_cnt - orig_hit_cnt;
   stage_cycles[STAGE_FLIP2] += stage_max;
 
-  /* Four walking bits. 四个比特步长 */
+  /* Four walking bits. 四个bit步长 */
 
   stage_name  = "bitflip 4/1";
   stage_short = "flip4";
