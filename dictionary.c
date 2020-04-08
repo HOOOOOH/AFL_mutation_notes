@@ -4,7 +4,7 @@
 
   if (!extras_cnt) goto skip_user_extras;
 
-  /* Overwrite with user-supplied extras. 用用户提供的附加功能覆盖 */
+  /* Overwrite with user-supplied extras. 使用用户提供的附加token覆盖 */
 
   stage_name  = "user extras (over)";
   stage_short = "ext_UO";
