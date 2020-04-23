@@ -36,30 +36,28 @@
  *                                                    *
  ******************************************************/
 
-/* Comment out to disable terminal colors (note that this makes afl-analyze
-   a lot less nice): */
+/* 注释掉取消使用终端颜色 */
 
 #define USE_COLOR
 
-/* Comment out to disable fancy ANSI boxes and use poor man's 7-bit UI: */
+/* 注释掉可以使用低配的7位UI */
 
 #define FANCY_BOXES
 
-/* Default timeout for fuzzed code (milliseconds). This is the upper bound,
-   also used for detecting hangs; the actual value is auto-scaled: */
+/* 模糊代码的默认超时（毫秒）。这是上限，也用于检测挂起；实际值是自动缩放的 */
 
 #define EXEC_TIMEOUT        1000
 
-/* Timeout rounding factor when auto-scaling (milliseconds): */
+/* 自动缩放时的超时四舍五入因子（毫秒） */
 
 #define EXEC_TM_ROUND       20
 
-/* 64bit arch MACRO */
+/* 64位arch宏 */
 #if (defined (__x86_64__) || defined (__arm64__) || defined (__aarch64__))
 #define WORD_SIZE_64 1
 #endif
 
-/* Default memory limit for child process (MB): */
+/* 子进程的默认内存限制（MB） */
 
 #ifndef WORD_SIZE_64
 #  define MEM_LIMIT         25
@@ -67,164 +65,152 @@
 #  define MEM_LIMIT         50
 #endif /* ^!WORD_SIZE_64 */
 
-/* Default memory limit when running in QEMU mode (MB): */
+/* 在QEMU模式下运行时的默认内存限制（MB）： */
 
 #define MEM_LIMIT_QEMU      200
 
-/* Number of calibration cycles per every new test case (and for test
-   cases that show variable behavior): */
+/* 每个新测试用例（以及显示出可变行为的测试用例）的校准周期数： */
 
 #define CAL_CYCLES          8
 #define CAL_CYCLES_LONG     40
 
-/* Number of subsequent timeouts before abandoning an input file: */
+/* 放弃输入文件后的后续超时次数： */
 
 #define TMOUT_LIMIT         250
 
-/* Maximum number of unique hangs or crashes to record: */
+/* 记录的unique hangs或crashes 的最大次数： */
 
 #define KEEP_UNIQUE_HANG    500
 #define KEEP_UNIQUE_CRASH   5000
 
-/* Baseline number of random tweaks during a single 'havoc' stage: */
+/* 单个“havoc”阶段的随机调整的基准数量 */
 
 #define HAVOC_CYCLES        256
 #define HAVOC_CYCLES_INIT   1024
 
-/* Maximum multiplier for the above (should be a power of two, beware
-   of 32-bit int overflows): */
+/* 上面的最大乘数（应为2的幂，请注意32位int溢出）: */
 
 #define HAVOC_MAX_MULT      16
 
-/* Absolute minimum number of havoc cycles (after all adjustments): */
+/* havoc周期的绝对最小数目（所有调整之后）： */
 
 #define HAVOC_MIN           16
 
-/* Maximum stacking for havoc-stage tweaks. The actual value is calculated
-   like this: 
+/* havoc-stage调整的最大堆叠量。 实际值是这样计算的: 
 
    n = random between 1 and HAVOC_STACK_POW2
    stacking = 2^n
 
-   In other words, the default (n = 7) produces 2, 4, 8, 16, 32, 64, or
-   128 stacked tweaks: */
+   换句话说，默认值（n = 7）产生2、4、8、16、32、64或128个堆叠的调整: */
 
 #define HAVOC_STACK_POW2    7
 
-/* Caps on block sizes for cloning and deletion operations. Each of these
-   ranges has a 33% probability of getting picked, except for the first
-   two cycles where smaller blocks are favored: */
+/* 限制块大小以进行克隆和删除操作。 这些范围中的每一个都有33％的概率被选中，除了前两个周期更喜欢较小的块: */
 
 #define HAVOC_BLK_SMALL     32
 #define HAVOC_BLK_MEDIUM    128
 #define HAVOC_BLK_LARGE     1500
 
-/* Extra-large blocks, selected very rarely (<5% of the time): */
+/* 特大块，很少选择（<5％的时间）: */
 
 #define HAVOC_BLK_XL        32768
 
-/* Probabilities of skipping non-favored entries in the queue, expressed as
-   percentages: */
+/* 跳过队列中不受欢迎的条目的概率，以百分比表示: */
 
-#define SKIP_TO_NEW_PROB    99 /* ...when there are new, pending favorites */
-#define SKIP_NFAV_OLD_PROB  95 /* ...no new favs, cur entry already fuzzed */
-#define SKIP_NFAV_NEW_PROB  75 /* ...no new favs, cur entry not fuzzed yet */
+#define SKIP_TO_NEW_PROB    99 /* 新的, 待定收藏夹 */
+#define SKIP_NFAV_OLD_PROB  95 /* 旧的,cur入口已经fuzz */
+#define SKIP_NFAV_NEW_PROB  75 /* 旧的, cur入口还没fuzz */
 
-/* Splicing cycle count: */
+/* splice周期数：*/
 
 #define SPLICE_CYCLES       15
 
-/* Nominal per-splice havoc cycle length: */
+/* 标准的每个splice的havoc周期长度： */
 
 #define SPLICE_HAVOC        32
 
-/* Maximum offset for integer addition / subtraction stages: */
+/* 整数加减法的最大偏移量 */
 
 #define ARITH_MAX           35
 
-/* Limits for the test case trimmer. The absolute minimum chunk size; and
-   the starting and ending divisors for chopping up the input file: */
+/* 测试用例微调器的限制。 绝对最小块大小；以及切入输入文件的开始和结束除数：*/
 
 #define TRIM_MIN_BYTES      4
 #define TRIM_START_STEPS    16
 #define TRIM_END_STEPS      1024
 
-/* Maximum size of input file, in bytes (keep under 100MB): */
+/* 输入文件的最大大小，以字节为单位（保持在100MB以下）: */
 
 #define MAX_FILE            (1 * 1024 * 1024)
 
-/* The same, for the test case minimizer: */
+/* 同样，对于测试用例最小化器: */
 
 #define TMIN_MAX_FILE       (10 * 1024 * 1024)
 
-/* Block normalization steps for afl-tmin: */
+/* afl-tmin的块标准化步骤: */
 
 #define TMIN_SET_MIN_SIZE   4
 #define TMIN_SET_STEPS      128
 
-/* Maximum dictionary token size (-x), in bytes: */
+/* 最大dictionary tokens大小（-x），以字节为单位: */
 
 #define MAX_DICT_FILE       128
 
-/* Length limits for auto-detected dictionary tokens: */
+/* 自动检测的dictionary tokens的长度限制: */
 
 #define MIN_AUTO_EXTRA      3
 #define MAX_AUTO_EXTRA      32
 
-/* Maximum number of user-specified dictionary tokens to use in deterministic
-   steps; past this point, the "extras/user" step will be still carried out,
-   but with proportionally lower odds: */
+/* 确定性步骤中要使用的用户指定的dictionary tokens的最大数量； 
+超过这一点，仍然会执行“extras/user”步骤，但是几率会降低: */
 
 #define MAX_DET_EXTRAS      200
 
-/* Maximum number of auto-extracted dictionary tokens to actually use in fuzzing
-   (first value), and to keep in memory as candidates. The latter should be much
-   higher than the former. */
+/* 实际在模糊测试中使用的最大数量的自动提取的dictionary tokens（第一个值），
+并作为候选保留在内存中。 后者应该比前者高得多. */
 
 #define USE_AUTO_EXTRAS     50
 #define MAX_AUTO_EXTRAS     (USE_AUTO_EXTRAS * 10)
 
-/* Scaling factor for the effector map used to skip some of the more
-   expensive deterministic steps. The actual divisor is set to
-   2^EFF_MAP_SCALE2 bytes: */
+/* effector map的比例因子用于跳过一些更昂贵的确定性步骤。
+ 实际除数设置为2 ^ EFF_MAP_SCALE2个字节: */
 
 #define EFF_MAP_SCALE2      3
 
-/* Minimum input file length at which the effector logic kicks in: */
+/* effector logic插入的最小输入文件长度 */
 
 #define EFF_MIN_LEN         128
 
-/* Maximum effector density past which everything is just fuzzed
-   unconditionally (%): */
+/* effector density最大值,超过该密度后，所有事物都会无条件fuzz（％）: */
 
 #define EFF_MAX_PERC        90
 
-/* UI refresh frequency (Hz): */
+/* UI 刷新频率 (Hz): */
 
 #define UI_TARGET_HZ        5
 
-/* Fuzzer stats file and plot update intervals (sec): */
+/* Fuzzer统计信息文件和绘图更新间隔（秒）: */
 
 #define STATS_UPDATE_SEC    60
 #define PLOT_UPDATE_SEC     5
 
-/* Smoothing divisor for CPU load and exec speed stats (1 - no smoothing). */
+/* 用于CPU负载和执行速度统计信息的平滑除数（1到不进行平滑）. */
 
 #define AVG_SMOOTHING       16
 
-/* Sync interval (every n havoc cycles): */
+/* 同步间隔 (每n个havoc cycles): */
 
 #define SYNC_INTERVAL       5
 
-/* Output directory reuse grace period (minutes): */
+/* 输出目录重用宽限期 (minutes): */
 
 #define OUTPUT_GRACE        25
 
-/* Uncomment to use simple file names (id_NNNNNN): */
+/* 取消使用简单文件名的注释 (id_NNNNNN): */
 
 // #define SIMPLE_FILES
 
-/* List of interesting values to use in fuzzing. */
+/* 用于fuzzing的interesting values */
 
 #define INTERESTING_8 \
   -128,          /* Overflow signed 8-bit when decremented  */ \
@@ -261,101 +247,97 @@
 
 /***********************************************************
  *                                                         *
- *  Really exotic stuff you probably don't want to touch:  *
+ *  您可能不想接触的真正奇特的东西:                          *
  *                                                         *
  ***********************************************************/
 
-/* Call count interval between reseeding the libc PRNG from /dev/urandom: */
+/* 从/dev/urandom重新播种libc PRNG之间的调用计数间隔: */
 
 #define RESEED_RNG          10000
 
-/* Maximum line length passed from GCC to 'as' and used for parsing
-   configuration files: */
+/* 从GCC传递到“ as”并用于解析配置文件的最大行长: */
 
 #define MAX_LINE            8192
 
-/* Environment variable used to pass SHM ID to the called program. */
+/* 用于将SHM ID传递给被调用程序的环境变量. */
 
 #define SHM_ENV_VAR         "__AFL_SHM_ID"
 
-/* Other less interesting, internal-only variables. */
+/* 其他不太有趣的仅供内部使用的变量. */
 
 #define CLANG_ENV_VAR       "__AFL_CLANG_MODE"
 #define AS_LOOP_ENV_VAR     "__AFL_AS_LOOPCHECK"
 #define PERSIST_ENV_VAR     "__AFL_PERSISTENT"
 #define DEFER_ENV_VAR       "__AFL_DEFER_FORKSRV"
 
-/* In-code signatures for deferred and persistent mode. */
+/* 延迟和持久模式的代码内签名. */
 
 #define PERSIST_SIG         "##SIG_AFL_PERSISTENT##"
 #define DEFER_SIG           "##SIG_AFL_DEFER_FORKSRV##"
 
-/* Distinctive bitmap signature used to indicate failed execution: */
+/* 独特的位图签名用于指示执行失败: */
 
 #define EXEC_FAIL_SIG       0xfee1dead
 
-/* Distinctive exit code used to indicate MSAN trip condition: */
+/* 独特的退出代码，用于指示MSAN跳闸情况: */
 
 #define MSAN_ERROR          86
 
-/* Designated file descriptors for forkserver commands (the application will
-   use FORKSRV_FD and FORKSRV_FD + 1): */
+/* forkserver命令的指定文件描述符(应用程序将使用FORKSRV_FD和FORKSRV_FD + 1): */
 
 #define FORKSRV_FD          198
 
-/* Fork server init timeout multiplier: we'll wait the user-selected
-   timeout plus this much for the fork server to spin up. */
+/* Fork服务器初始化超时倍增器：
+我们将等待用户选择的超时时间加上这一时间，以便Fork服务器启动. */
 
 #define FORK_WAIT_MULT      10
 
-/* Calibration timeout adjustments, to be a bit more generous when resuming
-   fuzzing sessions or trying to calibrate already-added internal finds.
-   The first value is a percentage, the other is in milliseconds: */
+/* 校准超时调整，
+在恢复模糊测试会话或尝试校准已经添加的内部发现时要更加慷慨。 
+第一个值是百分比，其他值以毫秒为单位: */
 
 #define CAL_TMOUT_PERC      125
 #define CAL_TMOUT_ADD       50
 
-/* Number of chances to calibrate a case before giving up: */
+/* 放弃之前校准案例的机会数量: */
 
 #define CAL_CHANCES         3
 
-/* Map size for the traced binary (2^MAP_SIZE_POW2). Must be greater than
-   2; you probably want to keep it under 18 or so for performance reasons
-   (adjusting AFL_INST_RATIO when compiling is probably a better way to solve
-   problems with complex programs). You need to recompile the target binary
-   after changing this - otherwise, SEGVs may ensue. */
+/* 跟踪的二进制文件的映射大小（2 ^ MAP_SIZE_POW2）。必须大于2；
+ 您可能出于性能原因而希望将其保持在18以下
+ （在编译时调整AFL_INST_RATIO可能是解决复杂程序问题的更好方法）。
+  更改此选项后，您需要重新编译目标二进制文件-否则，可能会发生SEGV. */
 
 #define MAP_SIZE_POW2       16
 #define MAP_SIZE            (1 << MAP_SIZE_POW2)
 
-/* Maximum allocator request size (keep well under INT_MAX): */
+/* 最大分配器请求大小（保持在INT_MAX以下）: */
 
 #define MAX_ALLOC           0x40000000
 
-/* A made-up hashing seed: */
+/* 伪造的哈希种子: */
 
 #define HASH_CONST          0xa5b35705
 
-/* Constants for afl-gotcpu to control busy loop timing: */
+/* afl-gotcpu用于控制忙循环定时的常量: */
 
 #define  CTEST_TARGET_MS    5000
 #define  CTEST_CORE_TRG_MS  1000
 #define  CTEST_BUSY_CYCLES  (10 * 1000 * 1000)
 
-/* Uncomment this to use inferior block-coverage-based instrumentation. Note
-   that you need to recompile the target binary for this to have any effect: */
+/* 取消注释以使用劣质的基于块覆盖的检测。 
+请注意，您需要重新编译目标二进制文件才能生效: */
 
 // #define COVERAGE_ONLY
 
-/* Uncomment this to ignore hit counts and output just one bit per tuple.
-   As with the previous setting, you will need to recompile the target
-   binary: */
+/*取消注释此操作将忽略命中计数，并且每个元组仅输出一位。
+  与之前的设置一样，您将需要重新编译目标二进制文件: */
 
 // #define SKIP_COUNTS
 
-/* Uncomment this to use instrumentation data to record newly discovered paths,
-   but do not use them as seeds for fuzzing. This is useful for conveniently
-   measuring coverage that could be attained by a "dumb" fuzzing algorithm: */
+/* 取消注释此选项可使用检测数据记录新发现的路径，
+但不要将其用作模糊测试的种子。 
+这对于方便地测量“哑”模糊算法可以实现的覆盖范围很有用: */
 
 // #define IGNORE_FINDS
 
