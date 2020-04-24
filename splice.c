@@ -67,12 +67,11 @@ retry_splicing:
       goto retry_splicing;
     }
 
-    /* Split somewhere between the first and last differing byte. 
-        在第一个和最后一个不同的字节之间拆分    */
+    /* 在第一个和最后一个不同的字节之间拆分 */
 
     split_at = f_diff + UR(l_diff - f_diff);
 
-    /* Do the thing. 实施操作 */
+    /* 实施操作 */
 
     len = target->len;
     memcpy(new_buf, in_buf, split_at);
