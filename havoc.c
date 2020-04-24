@@ -6,9 +6,7 @@ havoc_stage:
 
   stage_cur_byte = -1;
 
-  /* The havoc stage mutation code is also invoked when splicing files; if the
-     splice_cycle variable is set, generate different descriptions and such. 
-     havoc的代码在拼接时也被调用。 如果设置了splice_cycle变量，则生成不同的描述等   */
+  /* havoc的代码在拼接时也被调用。 如果设置了splice_cycle变量，则生成不同的描述等 */
 
   if (!splice_cycle) {
 
@@ -38,9 +36,7 @@ havoc_stage:
 
   havoc_queued = queued_paths;
 
-  /* We essentially just do several thousand runs (depending on perf_score)
-     where we take the input file and make random stacked tweaks.
-     实际上，我们只需要执行几千次运行（取决于perf_score），就可以获取输入文件并进行随机堆叠的调整 */
+  /* 实际上，我们只需要执行几千次运行（取决于perf_score），就可以获取输入文件并进行随机堆叠的调整 */
 
   for (stage_cur = 0; stage_cur < stage_max; stage_cur++) {
 
@@ -54,21 +50,21 @@ havoc_stage:
 
         case 0:
 
-          /* Flip a single bit somewhere. Spooky! 在某处翻转一点。幽灵般的！   */
+          /* 在某处翻转一个bit。就像幽灵一样！   */
 
           FLIP_BIT(out_buf, UR(temp_len << 3));
           break;
 
         case 1: 
 
-          /* Set byte to interesting value. 将字节设置为有趣的值    */
+          /* 将字节设置为有趣的值 */
 
           out_buf[UR(temp_len)] = interesting_8[UR(sizeof(interesting_8))];
           break;
 
         case 2:
 
-          /* Set word to interesting value, randomly choosing endian. 将字设置为有趣的值，随机选择字节存储次序    */
+          /* 将字设置为有趣的值，随机选择字节存储次序 */
 
           if (temp_len < 2) break;
 
@@ -88,7 +84,7 @@ havoc_stage:
 
         case 3:
 
-          /* Set dword to interesting value, randomly choosing endian. 将双字设置为有趣的值，随机选择字节存储次序 */
+          /* 将双字设置为有趣的值，随机选择字节存储次序 */
 
           if (temp_len < 4) break;
 
@@ -108,21 +104,21 @@ havoc_stage:
 
         case 4:
 
-          /* Randomly subtract from byte. 从字节中随机减去  */
+          /* 从字节中随机减去 */
 
           out_buf[UR(temp_len)] -= 1 + UR(ARITH_MAX);
           break;
 
         case 5:
 
-          /* Randomly add to byte. 随机加到字节上   */
+          /* 随机加到字节上 */
 
           out_buf[UR(temp_len)] += 1 + UR(ARITH_MAX);
           break;
 
         case 6:
 
-          /* Randomly subtract from word, random endian. 从字中随机减去，随机字节存储次序 */
+          /* 从字中随机减去，随机字节存储次序 */
 
           if (temp_len < 2) break;
 
@@ -146,7 +142,7 @@ havoc_stage:
 
         case 7:
 
-          /* Randomly add to word, random endian. 随机加到字上，随机字节存储次序*/
+          /* 随机加到字上，随机字节存储次序 */
 
  
 
@@ -172,7 +168,7 @@ havoc_stage:
 
         case 8:
 
-          /* Randomly subtract from dword, random endian. 从双字中随机减去，随机字节存储次序  */
+          /* 从双字中随机减去，随机字节存储次序 */
 
           if (temp_len < 4) break;
 
@@ -196,7 +192,7 @@ havoc_stage:
 
         case 9:
 
-          /* Randomly add to dword, random endian. 随机加到双字上，随机字节存储次序 */
+          /* 随机加到双字上，随机字节存储次序 */
 
           if (temp_len < 4) break;
 
@@ -220,26 +216,20 @@ havoc_stage:
 
         case 10:
 
-          /* Just set a random byte to a random value. Because,
-             why not. We use XOR with 1-255 to eliminate the
-             possibility of a no-op. 
-             只需将随机字节设置为随机值即可。因为，为什么不呢。我们将XOR与1-255一起使用，以消除无操作的可能性   */
+          /* 只需将随机字节设置为随机值即可。因为，为什么不呢。我们将XOR与1-255一起使用，以消除无操作的可能性 */
 
           out_buf[UR(temp_len)] ^= 1 + UR(255);
           break;
 
         case 11 ... 12: {
 
-            /* Delete bytes. We're making this a bit more likely
-               than insertion (the next option) in hopes of keeping
-               files reasonably small. 
-               删除字节。我们要使其比插入（下一个选项）更有可能，希望将文件保持在较小的范围内   */
+            /* 删除字节。我们要使其比插入（下一个选项）更有可能，希望将文件保持在较小的范围内 */
 
             u32 del_from, del_len;
 
             if (temp_len < 2) break;
 
-            /* Don't delete too much. 别删太多  */
+            /* 别删太多 */
 
             del_len = choose_block_len(temp_len - 1);
 
@@ -258,8 +248,7 @@ havoc_stage:
 
           if (temp_len + HAVOC_BLK_XL < MAX_FILE) {
 
-            /* Clone bytes (75%) or insert a block of constant bytes (25%).
-                复制字节（75％）或插入一个常量字节块（25％） */
+            /* 复制字节（75％）或插入一个常量字节块（25％) */
 
             u8  actually_clone = UR(4);
             u32 clone_from, clone_to, clone_len;
@@ -281,11 +270,11 @@ havoc_stage:
 
             new_buf = ck_alloc_nozero(temp_len + clone_len);
 
-            /* Head 头部 */
+            /* 头部 */
 
             memcpy(new_buf, out_buf, clone_to);
 
-            /* Inserted part 插入部分 */
+            /* 插入部分 */
 
             if (actually_clone)
               memcpy(new_buf + clone_to, out_buf + clone_from, clone_len);
@@ -293,7 +282,7 @@ havoc_stage:
               memset(new_buf + clone_to,
                      UR(2) ? UR(256) : out_buf[UR(temp_len)], clone_len);
 
-            /* Tail 尾部 */
+            /* 尾部 */
             memcpy(new_buf + clone_to + clone_len, out_buf + clone_to,
                    temp_len - clone_to);
 
@@ -307,9 +296,7 @@ havoc_stage:
 
         case 14: {
 
-            /* Overwrite bytes with a randomly selected chunk (75%) or fixed
-               bytes (25%). 
-               用随机选择的块（75％）或固定字节（25％）覆盖字节 */
+            /* 用随机选择的块（75％）或固定字节（25％）覆盖字节 */
 
             u32 copy_from, copy_to, copy_len;
 
@@ -332,20 +319,15 @@ havoc_stage:
 
           }
 
-        /* Values 15 and 16 can be selected only if there are any extras
-           present in the dictionaries. 
-           只有在字典中存在任何额外token时才能选择值15和16 */
+        /* 只有在字典中存在任何额外token时才能选择值15和16 */
 
         case 15: {
 
-            /* Overwrite bytes with an extra. 
-                额外覆盖字节*/
+            /* 额外覆盖字节*/
 
             if (!extras_cnt || (a_extras_cnt && UR(2))) {
 
-              /* No user-specified extras or odds in our favor. Let's use an
-                 auto-detected one.
-                 没有用户指定的额外费用或赔率对我们有利。让我们使用一个自动检测的 */
+              /* 没有用户指定的额外费用或赔率对我们有利。让我们使用一个自动检测的 */
 
               u32 use_extra = UR(a_extras_cnt);
               u32 extra_len = a_extras[use_extra].len;
@@ -358,8 +340,7 @@ havoc_stage:
 
             } else {
 
-              /* No auto extras or odds in our favor. Use the dictionary.
-              没有我们想要的自动附加token或机会，那么使用字典  */
+              /* 没有我们想要的自动附加token或机会，那么使用字典  */
 
               u32 use_extra = UR(extras_cnt);
               u32 extra_len = extras[use_extra].len;
@@ -381,9 +362,7 @@ havoc_stage:
             u32 use_extra, extra_len, insert_at = UR(temp_len + 1);
             u8* new_buf;
 
-            /* Insert an extra. Do the same dice-rolling stuff as for the
-               previous case.
-               插入一个额外的token。做与上一案例相同的掷骰子操作 */
+            /* 插入一个额外的token。做与上一案例相同的掷骰子操作 */
 
             if (!extras_cnt || (a_extras_cnt && UR(2))) {
 
@@ -394,10 +373,10 @@ havoc_stage:
 
               new_buf = ck_alloc_nozero(temp_len + extra_len);
 
-              /* Head 头部 */
+              /* 头部 */
               memcpy(new_buf, out_buf, insert_at);
 
-              /* Inserted part 插入部分 */
+              /* 插入部分 */
               memcpy(new_buf + insert_at, a_extras[use_extra].data, extra_len);
 
             } else {
@@ -409,15 +388,15 @@ havoc_stage:
 
               new_buf = ck_alloc_nozero(temp_len + extra_len);
 
-              /* Head 头部 */
+              /* 头部 */
               memcpy(new_buf, out_buf, insert_at);
 
-              /* Inserted part 插入部分 */
+              /* 插入部分 */
               memcpy(new_buf + insert_at, extras[use_extra].data, extra_len);
 
             }
 
-            /* Tail 尾部 */
+            /* 尾部 */
             memcpy(new_buf + insert_at + extra_len, out_buf + insert_at,
                    temp_len - insert_at);
 
@@ -436,17 +415,13 @@ havoc_stage:
     if (common_fuzz_stuff(argv, out_buf, temp_len))
       goto abandon_entry;
 
-    /* out_buf might have been mangled a bit, so let's restore it to its
-       original size and shape. 
-       out_buf可能已经被弄乱了一些，所以让我们将其恢复为原始大小和形状 */
+    /* out_buf可能已经被弄乱了一些，所以让我们将其恢复为原始大小和形状 */
 
     if (temp_len < len) out_buf = ck_realloc(out_buf, len);
     temp_len = len;
     memcpy(out_buf, in_buf, len);
 
-    /* If we're finding new stuff, let's run for a bit longer, limits
-       permitting. 
-       如果我们发现新的东西，让我们运行更长的时间，限制在允许的范围内 */
+    /* 如果我们发现新的东西，让我们运行更长的时间，限制在允许的范围内 */
 
     if (queued_paths != havoc_queued) {
 
