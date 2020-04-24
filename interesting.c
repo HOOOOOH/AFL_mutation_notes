@@ -11,13 +11,13 @@
 
   orig_hit_cnt = new_hit_cnt;
 
-  /* Setting 8-bit integers. 设置8-bit整数 */
+  /* 设置8-bit整数 */
 
   for (i = 0; i < len; i++) {
 
     u8 orig = out_buf[i];
 
-    /* Let's consult the effector map... 查阅effector map */
+    /* 查阅effector map */
 
     if (!eff_map[EFF_APOS(i)]) {
       stage_max -= sizeof(interesting_8);
@@ -28,8 +28,7 @@
 
     for (j = 0; j < sizeof(interesting_8); j++) {
 
-      /* Skip if the value could be a product of bitflips or arithmetics. 
-         如果该值可能是位翻转或算术的乘积，则跳过 */
+      /* 如果该值可能是位翻转或算术的乘积，则跳过 */
 
       if (could_be_bitflip(orig ^ (u8)interesting_8[j]) ||
           could_be_arith(orig, (u8)interesting_8[j], 1)) {
@@ -54,7 +53,7 @@
   stage_finds[STAGE_INTEREST8]  += new_hit_cnt - orig_hit_cnt;
   stage_cycles[STAGE_INTEREST8] += stage_max;
 
-  /* Setting 16-bit integers, both endians. 16-bit 整数 */
+  /* 整数，both endian */
 
   if (no_arith || len < 2) goto skip_interest;
 
@@ -69,7 +68,7 @@
 
     u16 orig = *(u16*)(out_buf + i);
 
-    /* Let's consult the effector map... 查阅effector map */
+    /* 查阅effector map */
 
     if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)]) {
       stage_max -= sizeof(interesting_16);
@@ -82,9 +81,7 @@
 
       stage_cur_val = interesting_16[j];
 
-      /* Skip if this could be a product of a bitflip, arithmetics,
-         or single-byte interesting value insertion. 
-         如果这可能是位翻转，算术或单字节有意思的值插入的产物，则跳过 */
+      /* 如果这可能是位翻转，算术或单字节interesting的值插入的产物，则跳过 */
 
       if (!could_be_bitflip(orig ^ (u16)interesting_16[j]) &&
           !could_be_arith(orig, (u16)interesting_16[j], 2) &&
@@ -125,7 +122,7 @@
 
   if (len < 4) goto skip_interest;
 
-  /* Setting 32-bit integers, both endians. 32-bit置换*/
+  /* 32-bit置换,both endian */
 
   stage_name  = "interest 32/8";
   stage_short = "int32";
@@ -138,7 +135,7 @@
 
     u32 orig = *(u32*)(out_buf + i);
 
-    /* Let's consult the effector map... 查阅effector map */
+    /* 查阅effector map */
 
     if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)] &&
         !eff_map[EFF_APOS(i + 2)] && !eff_map[EFF_APOS(i + 3)]) {
@@ -152,9 +149,7 @@
 
       stage_cur_val = interesting_32[j];
 
-      /* Skip if this could be a product of a bitflip, arithmetics,
-         or word interesting value insertion.
-         如果这可能是位翻转，算术或字的有意思的值插入的产物，则跳过 */
+      /* 如果这可能是位翻转，算术或字的interesting的值插入的产物，则跳过 */
 
       if (!could_be_bitflip(orig ^ (u32)interesting_32[j]) &&
           !could_be_arith(orig, interesting_32[j], 4) &&
