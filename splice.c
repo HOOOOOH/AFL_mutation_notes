@@ -2,11 +2,7 @@
    * SPLICING 拼接 *
    ****************/
 
-  /* This is a last-resort strategy triggered by a full round with no findings.
-     It takes the current input file, randomly selects another input, and
-     splices them together at some offset, then relies on the havoc
-     code to mutate that blob. 
-     这是最后一招，由一整轮没有发现的结果触发。
+  /* 这是最后一招，由一整轮没有发现的结果触发。
      它获取当前输入文件，随机选择另一个输入，并以一定的偏移量将它们拼接在一起，然后依靠破坏代码来使该blob突变   */
 
 retry_splicing:
@@ -19,9 +15,7 @@ retry_splicing:
     u8* new_buf;
     s32 f_diff, l_diff;
 
-    /* First of all, if we've modified in_buf for havoc, let's clean that
-       up...
-       首先，如果我们修改了in_buf来为havoc做准备，让我们清理一下    */
+    /* 首先，如果我们修改了in_buf来为havoc做准备，让我们清理一下 */
 
     if (in_buf != orig_in) {
       ck_free(in_buf);
@@ -29,8 +23,7 @@ retry_splicing:
       len = queue_cur->len;
     }
 
-    /* Pick a random queue entry and seek to it. Don't splice with yourself. 
-        选择一个随机队列条目并拿到它。不要自拼接    */
+    /* 选择一个随机队列条目并拿到它。不要自拼接 */
 
     do { tid = UR(queued_paths); } while (tid == current_entry);
 
@@ -40,8 +33,7 @@ retry_splicing:
     while (tid >= 100) { target = target->next_100; tid -= 100; }
     while (tid--) target = target->next;
 
-    /* Make sure that the target has a reasonable length. 
-        确保目标长度合适    */
+    /* 确保目标长度合适 */
 
     while (target && (target->len < 2 || target == queue_cur)) {
       target = target->next;
@@ -50,8 +42,7 @@ retry_splicing:
 
     if (!target) goto retry_splicing;
 
-    /* Read the testcase into a new buffer. 
-        将测试用例读入新缓冲区  */
+    /* 将测试用例读入新缓冲区 */
 
     fd = open(target->fname, O_RDONLY);
 
@@ -66,7 +57,8 @@ retry_splicing:
     /* Find a suitable splicing location, somewhere between the first and
        the last differing byte. Bail out if the difference is just a single
        byte or so. 
-       在第一个和最后一个不同的字节之间找到合适的拼接位置。如果差异仅是一个字节左右，就排除（还有保释、舀水的意思)。  */
+       在第一个和最后一个不同的字节之间找到合适的拼接位置。
+       如果差异仅是一个字节左右，就排除（还有保释、舀水的意思)。  */
 
     locate_diffs(in_buf, new_buf, MIN(len, target->len), &f_diff, &l_diff);
 
