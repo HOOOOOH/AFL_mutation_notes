@@ -2,7 +2,7 @@
    * ARITHMETIC INC/DEC 算数增/减 *
    *******************************/
 
-  /* 8-bit arithmetics. 8位算数运算 */
+  /* 8位算数运算 */
 
   stage_name  = "arith 8/8";
   stage_short = "arith8";
@@ -17,7 +17,7 @@
 
     u8 orig = out_buf[i];
 
-    /* Let's consult the effector map... 查阅effect map */
+    /* 查阅effect map */
 
     if (!eff_map[EFF_APOS(i)]) {
       stage_max -= 2 * ARITH_MAX;
@@ -30,9 +30,7 @@
 
       u8 r = orig ^ (orig + j);
 
-      /* Do arithmetic operations only if the result couldn't be a product
-         of a bitflip. 
-         仅当结果不是位翻转的乘积时才进行算术运算 */
+      /* 仅当结果不是位翻转的乘积时才进行算术运算 */
 
       if (!could_be_bitflip(r)) {
 
@@ -67,7 +65,7 @@
   stage_finds[STAGE_ARITH8]  += new_hit_cnt - orig_hit_cnt;
   stage_cycles[STAGE_ARITH8] += stage_max;
 
-  /* 16-bit arithmetics, both endians. 16位算数运算 */
+  /* 16位算数运算 */
 
   if (len < 2) goto skip_arith;
 
@@ -82,7 +80,7 @@
 
     u16 orig = *(u16*)(out_buf + i);
 
-    /* Let's consult the effector map... 查阅effect map */
+    /* 查阅effect map */
 
     if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)]) {
       stage_max -= 4 * ARITH_MAX;
@@ -98,11 +96,7 @@
           r3 = orig ^ SWAP16(SWAP16(orig) + j),
           r4 = orig ^ SWAP16(SWAP16(orig) - j);
 
-      /* Try little endian addition and subtraction first. Do it only
-         if the operation would affect more than one byte (hence the 
-         & 0xff overflow checks) and if it couldn't be a product of
-         a bitflip. 
-         首先尝试小端序加法和减法。
+      /* 首先尝试小端序加法和减法。
          仅当操作会影响一个以上的字节（因此进行＆0xff溢出检查）
          并且它不能是位翻转的产物时才执行此操作*/
 
@@ -128,8 +122,7 @@
 
       } else stage_max--;
 
-      /* Big endian comes next. Same deal.
-        接下来是大字节序。 */
+      /* 接下来是大字节序。 */
 
       stage_val_type = STAGE_VAL_BE;
 
@@ -165,7 +158,7 @@
   stage_finds[STAGE_ARITH16]  += new_hit_cnt - orig_hit_cnt;
   stage_cycles[STAGE_ARITH16] += stage_max;
 
-  /* 32-bit arithmetics, both endians. 32位算数运算，同样的字节排序 */
+  /* 32位算数运算，同样的字节排序 */
 
   if (len < 4) goto skip_arith;
 
@@ -180,7 +173,7 @@
 
     u32 orig = *(u32*)(out_buf + i);
 
-    /* Let's consult the effector map... 查阅effector map */
+    /* 查阅effector map */
 
     if (!eff_map[EFF_APOS(i)] && !eff_map[EFF_APOS(i + 1)] &&
         !eff_map[EFF_APOS(i + 2)] && !eff_map[EFF_APOS(i + 3)]) {
@@ -197,10 +190,8 @@
           r3 = orig ^ SWAP32(SWAP32(orig) + j),
           r4 = orig ^ SWAP32(SWAP32(orig) - j);
 
-      /* Little endian first. Same deal as with 16-bit: we only want to
-         try if the operation would have effect on more than two bytes. 
-         小端优先。
-         与16位相同：我们只想尝试该操作是否会对两个以上的字节产生影响。*/
+      /* 小端优先。
+      与16位相同：我们只想尝试该操作是否会对两个以上的字节产生影响。*/
 
       stage_val_type = STAGE_VAL_LE;
 
@@ -224,8 +215,7 @@
 
       } else stage_max--;
 
-      /* Big endian next. 
-         接着是大端 */
+      /* 接着是大端 */
 
       stage_val_type = STAGE_VAL_BE;
 
